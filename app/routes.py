@@ -10,6 +10,21 @@ def index():
     data = jsonify({"message": "Pizza Restaurant domain."})
     return data
 
+@app.route('/restaurants', methods=['POST'])
+def create_restaurant():
+    data = request.get_json()
+
+    name = data.get('name')
+    address = data.get('address')
+
+    new_restaurant = Restaurant(name=name, address=address)
+
+    db.session.add(new_restaurant)
+
+    db.session.commit()
+
+    return jsonify({'message': 'Restaurant added successfully'}), 201
+
 # Route to get a list of restaurants
 @app.route('/restaurants', methods=['GET'])
 def get_restaurants():
@@ -120,17 +135,7 @@ def create_restaurant_pizza():
     return jsonify(pizza_data), 201
 
 
-@app.route('/pizzas', methods=['POST'])
-def create_pizza():
-    data = request.get_json()
-    name = data.get('name')
-    ingredients = data.get('ingredients')
 
-    new_pizza = Pizzas(name=name, ingredients=ingredients)
-    db.session.add(new_pizza)
-    db.session.commit()
 
-    return jsonify({'message': 'The Pizza was added successfully !!'}), 201
-
-if __name__ == '__main__':
-    app.run(debug=True)
+# if __name__ == '__main__':
+#     app.run(debug=True)
